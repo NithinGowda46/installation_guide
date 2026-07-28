@@ -1,0 +1,168 @@
+# Install Kubernetes Using Kind (Ubuntu & RHEL)
+
+> **Prerequisites**
+>
+> - Docker installed and running
+> - User with sudo privileges
+
+---
+
+# Step 1: Verify Docker
+
+```bash
+docker --version
+sudo systemctl status docker
+```
+
+---
+
+# Step 2: Install kubectl
+
+## Ubuntu
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+```bash
+chmod +x kubectl
+```
+
+```bash
+sudo mv kubectl /usr/local/bin/
+```
+
+Verify:
+
+```bash
+kubectl version --client
+```
+
+---
+
+## RHEL / Rocky / AlmaLinux
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+```bash
+chmod +x kubectl
+```
+
+```bash
+sudo mv kubectl /usr/local/bin/
+```
+
+Verify:
+
+```bash
+kubectl version --client
+```
+
+---
+
+# Step 3: Install Kind
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+```
+
+```bash
+chmod +x kind
+```
+
+```bash
+sudo mv kind /usr/local/bin/
+```
+
+Verify:
+
+```bash
+kind --version
+```
+
+---
+
+# Step 4: Create Kind Cluster Configuration
+
+Create a file named **kind-cluster.yaml**
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+nodes:
+- role: control-plane
+
+- role: worker
+
+- role: worker
+
+- role: worker
+```
+
+---
+
+# Step 5: Create the Cluster
+
+```bash
+kind create cluster --name devops-cluster --config kind-cluster.yaml
+```
+
+---
+
+# Step 6: Verify Cluster
+
+```bash
+kubectl cluster-info
+```
+
+```bash
+kubectl get nodes
+```
+
+Expected Output:
+
+```text
+NAME                                 STATUS   ROLES           AGE
+devops-cluster-control-plane         Ready    control-plane
+devops-cluster-worker                Ready
+devops-cluster-worker2               Ready
+devops-cluster-worker3               Ready
+```
+
+---
+
+# Step 7: View Docker Containers
+
+```bash
+docker ps
+```
+
+---
+
+# Step 8: Get Cluster Information
+
+```bash
+kind get clusters
+```
+
+---
+
+# Step 9: Delete the Cluster
+
+```bash
+kind delete cluster --name devops-cluster
+```
+
+---
+
+# Verify Installation
+
+```bash
+docker --version
+kubectl version --client
+kind --version
+kubectl get nodes
+```
