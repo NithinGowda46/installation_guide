@@ -1,0 +1,113 @@
+# Git Remote Commands
+
+## View Remote Repositories
+
+```bash
+git remote -v
+```
+
+---
+
+## Show Remote Details
+
+```bash
+git remote show origin
+```
+
+---
+
+## Add Remote Repository
+
+```bash
+git remote add origin <repository-url>
+```
+
+---
+
+## Change Remote Repository URL
+
+```bash
+git remote set-url origin <new-repository-url>
+```
+
+---
+
+## Remove Remote Repository
+
+```bash
+git remote remove origin
+```
+
+---
+
+## Rename Remote Repository
+
+```bash
+git remote rename origin upstream
+```
+
+---
+
+## List Remote Branches
+
+```bash
+git branch -r
+```
+
+---
+
+# Git Configuration Commands
+
+## Set Username
+
+```bash
+git config --global user.name "Your Name"
+```
+
+---
+
+## Set Email
+
+```bash
+git config --global user.email "your-email@example.com"
+```
+
+---
+
+## View Username
+
+```bash
+git config --global user.name
+```
+
+---
+
+## View Email
+
+```bash
+git config --global user.email
+```
+
+---
+
+## View All Global Configuration
+
+```bash
+git config --global --list
+```
+
+---
+
+## View All Git Configuration
+
+```bash
+git config --list
+```
+
+---
+
+## Edit Global Configuration
+
+```bash
+git config --global --edit
+```
