@@ -1,0 +1,17 @@
+# Argo CD Dashboard Access
+
+## Port Forward Argo CD Server
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+---
+
+## Access Argo CD Dashboard
+
+Open your browser:
+
+```
+https://localhost:8080
+```
