@@ -22,9 +22,53 @@ brew install ansible
 ansible --version
 ```
 
+### Ansible Installation Path
+
+Check:
+
+```bash
+which ansible
+```
+
+Typical path:
+
+```text
+/opt/homebrew/bin/ansible
+```
+
+For Intel-based Macs:
+
+```text
+/usr/local/bin/ansible
+```
+
+### Ansible Configuration Path
+
+Default configuration:
+
+```text
+/etc/ansible/ansible.cfg
+```
+
+User-level configuration:
+
+```text
+~/.ansible.cfg
+```
+
+Recommended project structure:
+
+```text
+~/ansible/
+├── ansible.cfg
+├── hosts
+├── playbooks/
+└── roles/
+```
+
 ---
 
-## 2. Red Hat Enterprise Linux (RHEL)
+# 2. Red Hat Enterprise Linux (RHEL)
 
 ### Update Packages
 
@@ -44,9 +88,59 @@ sudo dnf install ansible-core -y
 ansible --version
 ```
 
+### Ansible Installation Path
+
+Check:
+
+```bash
+which ansible
+```
+
+Typical path:
+
+```text
+/usr/bin/ansible
+```
+
+Check Ansible files:
+
+```bash
+rpm -ql ansible-core
+```
+
+### Ansible Configuration Path
+
+Default configuration:
+
+```text
+/etc/ansible/ansible.cfg
+```
+
+Default inventory:
+
+```text
+/etc/ansible/hosts
+```
+
+User-level configuration:
+
+```text
+~/.ansible.cfg
+```
+
+Recommended project structure:
+
+```text
+/root/ansible/
+├── ansible.cfg
+├── hosts
+├── playbooks/
+└── roles/
+```
+
 ---
 
-## 3. Ubuntu
+# 3. Ubuntu
 
 ### Update Packages
 
@@ -66,74 +160,52 @@ sudo apt install ansible -y
 ansible --version
 ```
 
----
+### Ansible Installation Path
 
-## 4. Check Ansible Installation
-
-Run on any of the systems:
+Check:
 
 ```bash
-ansible --version
+which ansible
 ```
 
-Example output:
+Typical path:
 
 ```text
-ansible [core ...]
-  python version = ...
-  jinja version = ...
-  libyaml = True
+/usr/bin/ansible
 ```
 
----
-
-## 5. Check Ansible Playbook
+Check installed files:
 
 ```bash
-ansible-playbook --version
+dpkg -L ansible
 ```
 
-Example:
+### Ansible Configuration Path
+
+Default configuration:
 
 ```text
-ansible-playbook [core ...]
+/etc/ansible/ansible.cfg
 ```
 
----
-
-## 6. Basic Ansible Directory Structure
+Default inventory:
 
 ```text
-ansible/
+/etc/ansible/hosts
+```
+
+User-level configuration:
+
+```text
+~/.ansible.cfg
+```
+
+Recommended project structure:
+
+```text
+~/ansible/
 ├── ansible.cfg
 ├── hosts
 ├── playbooks/
-│   └── app_install.yml
 └── roles/
 ```
-
-Create the directories:
-
-```bash
-mkdir -p ~/ansible/playbooks
-mkdir -p ~/ansible/roles
-cd ~/ansible
-```
-
----
-
-## 7. Test Ansible
-
-Check the installed version:
-
-```bash
-ansible --version
-```
-
-Check the playbook command:
-
-```bash
-ansible-playbook --version
-```
-
-Ansible is now installed and ready to use.
