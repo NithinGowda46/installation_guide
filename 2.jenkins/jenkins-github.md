@@ -82,24 +82,18 @@ Copy the complete private key and paste it into Jenkins.
 
 > Never share the private key or commit it to GitHub.
 
-## 6. Use SSH URL in Jenkins Pipeline
+## 6. Test GitHub SSH Connection from Server
 
-For the CD repository:
+Run the following command as the Jenkins user:
 
-```groovy
-git branch: 'main',
-    credentialsId: 'github-ssh',
-    url: 'git@github.com:NithinGowda46/Project2-chatapp-CD.git'
+```bash
+sudo -u jenkins ssh -i /var/lib/jenkins/.ssh/id_ed25519 -T git@github.com
 ```
 
-## GitHub → Jenkins Flow
+If the connection is successful, GitHub will show:
 
 ```text
-Jenkins
-   ↓
-SSH Private Key
-   ↓
-GitHub SSH Authentication
-   ↓
-Project2-chatapp-CD
+Hi NithinGowda46! You've successfully authenticated, but GitHub does not provide shell access.
 ```
+
+This confirms that the Jenkins server can authenticate with GitHub using SSH.
