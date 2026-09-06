@@ -1,158 +1,105 @@
-# Connect GitHub with Jenkins Using SSH
+# GitHub – Jenkins SSH Connection
 
-## Step 1: Switch to the Jenkins User
+SSH authentication is used for Jenkins to access and push changes to the GitHub CD repository.
 
-    sudo su - jenkins
+## 1. Create SSH Directory for Jenkins
 
-## Step 2: Create the SSH Directory
+```bash
+sudo mkdir -p /var/lib/jenkins/.ssh
+sudo chown jenkins:jenkins /var/lib/jenkins/.ssh
+sudo chmod 700 /var/lib/jenkins/.ssh
+```
 
-    mkdir -p ~/.ssh
-    chmod 700 ~/.ssh
+## 2. Generate SSH Key for Jenkins
 
-## Step 3: Generate SSH Key
+```bash
+sudo -u jenkins ssh-keygen -t ed25519 -C "jenkins-github"
+```
 
-    ssh-keygen -t ed25519 -C "jenkins-github"
+Press `Enter` for the default file location and leave the passphrase empty.
 
-Press Enter to use the default file location.
+The keys are created at:
 
-The keys will be created as:
+```text
+/var/lib/jenkins/.ssh/id_ed25519
+/var/lib/jenkins/.ssh/id_ed25519.pub
+```
 
-    /var/lib/jenkins/.ssh/id_ed25519
-    /var/lib/jenkins/.ssh/id_ed25519.pub
+## 3. Add Public Key to GitHub
 
-## Step 4: Display the Jenkins Public Key
+Display the public key:
 
-    cat ~/.ssh/id_ed25519.pub
+```bash
+sudo -u jenkins cat /var/lib/jenkins/.ssh/id_ed25519.pub
+```
 
-Copy the complete output.
+Copy the complete output and add it to:
 
-## Step 5: Add the Public Key to GitHub
+**GitHub → Settings → SSH and GPG keys → New SSH key**
+
+Example title:
+
+```text
+Jenkins CD Server
+```
+
+## 4. Add GitHub Host Key
+
+```bash
+sudo -u jenkins sh -c 'ssh-keyscan github.com >> /var/lib/jenkins/.ssh/known_hosts'
+```
+
+Set the correct permissions:
+
+```bash
+sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh
+sudo chmod 700 /var/lib/jenkins/.ssh
+sudo chmod 644 /var/lib/jenkins/.ssh/known_hosts
+```
+
+## 5. Create Jenkins Credential
 
 Go to:
 
-    GitHub
-    → Settings
-    → SSH and GPG keys
-    → New SSH key
+**Jenkins → Manage Jenkins → Credentials → Global → Add Credentials**
 
-Title:
+Configure:
 
-    Jenkins-EC2
+```text
+Kind: SSH Username with private key
+Username: git
+ID: github-ssh
+Private Key: Enter directly
+```
 
-Key type:
+Get the private key:
 
-    Authentication Key
+```bash
+sudo cat /var/lib/jenkins/.ssh/id_ed25519
+```
 
-Paste the public key from:
+Copy the complete private key and paste it into Jenkins.
 
-    cat ~/.ssh/id_ed25519.pub
+> Never share the private key or commit it to GitHub.
 
-Click:
+## 6. Use SSH URL in Jenkins Pipeline
 
-    Add SSH key
+For the CD repository:
 
-## Step 6: Test GitHub SSH Authentication
+```groovy
+git branch: 'main',
+    credentialsId: 'github-ssh',
+    url: 'git@github.com:NithinGowda46/Project2-chatapp-CD.git'
+```
 
-While still using the Jenkins user:
+## GitHub → Jenkins Flow
 
-    ssh -T git@github.com
-
-If GitHub asks:
-
-    Are you sure you want to continue connecting?
-
-Enter:
-
-    yes
-
-## Step 7: Add Jenkins SSH Credential
-
-Open Jenkins:
-
-    Manage Jenkins
-    → Credentials
-    → System
-    → Global credentials
-    → Add Credentials
-
-Select:
-
-    Kind: SSH Username with private key
-
-Set:
-
-    Username: git
-    ID: github-ssh
-
-Select:
-
-    Enter directly
-
-Get the Jenkins private key:
-
-    sudo cat /var/lib/jenkins/.ssh/id_ed25519
-
-Copy the complete private key into Jenkins.
-
-Click:
-
-    Create
-
-## Step 8: Test Application Repository
-
-The Jenkins credential can access the application repository:
-
-    git@github.com:NithinGowda46/Project1-notesapp-application.git
-
-## Step 9: Test GitOps Repository
-
-The same Jenkins credential can access the GitOps repository:
-
-    git@github.com:NithinGowda46/Project1-notesapp-devops.git
-
-The GitHub account must have access to both repositories.
-
-## Step 10: Jenkinsfile GitHub Configuration
-
-For the application repository:
-
-    git branch: 'main',
-        credentialsId: 'github-ssh',
-        url: 'git@github.com:NithinGowda46/Project1-notesapp-application.git'
-
-For the GitOps repository:
-
-    git branch: 'main',
-        credentialsId: 'github-ssh',
-        url: 'git@github.com:NithinGowda46/Project1-notesapp-devops.git'
-
-## Authentication Flow
-
-    Jenkins Server
-          ↓
-    Jenkins User
-          ↓
-    SSH Private Key
-          ↓
-    Jenkins Credential
-       github-ssh
-          ↓
-    GitHub
-          ↓
-    Application Repository
-          +
-    GitOps Repository
-
-## Important
-
-Do NOT add the Jenkins private key to GitHub.
-
-GitHub receives only:
-
-    id_ed25519.pub
-
-Jenkins keeps:
-
-    id_ed25519
-
-Never commit the private key to your GitHub repository.
+```text
+Jenkins
+   ↓
+SSH Private Key
+   ↓
+GitHub SSH Authentication
+   ↓
+Project2-chatapp-CD
+```
