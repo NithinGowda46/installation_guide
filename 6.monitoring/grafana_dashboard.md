@@ -1,6 +1,6 @@
-# Prometheus Dashboard Access
+# Grafana Dashboard Access
 
-## Port Forward Prometheus
+## Port Forward Grafana
 
 ```bash
 kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
@@ -8,7 +8,7 @@ kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
 
 ---
 
-## Access Prometheus Dashboard
+## Access Grafana Dashboard
 
 Open your browser:
 
