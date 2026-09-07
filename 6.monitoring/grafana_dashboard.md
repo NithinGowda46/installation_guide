@@ -3,7 +3,7 @@
 ## Port Forward Prometheus
 
 ```bash
-kubectl port-forward -n monitoring svc/prometheus-k8s 9090:9090
+kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
 ```
 
 ---
@@ -13,5 +13,5 @@ kubectl port-forward -n monitoring svc/prometheus-k8s 9090:9090
 Open your browser:
 
 ```
-http://localhost:9090
+http://localhost:3000
 ```
